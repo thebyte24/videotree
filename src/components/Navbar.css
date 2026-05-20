@@ -1,0 +1,100 @@
+.navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 300;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 44px;
+  /* Fully transparent over hero */
+  background: transparent;
+  border-bottom: none;
+  transition: background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+/* Becomes white/frosted when scrolled past hero */
+.navbar--scrolled {
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+/* Logo — white on hero, dark when scrolled */
+.navbar__logo-text {
+  font-family: var(--font-d);
+  font-size: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: rgba(255,255,255,0.92);
+  transition: color 0.4s;
+}
+
+.navbar--scrolled .navbar__logo-text {
+  color: var(--charcoal);
+}
+
+.navbar__logo { width: 130px; }
+
+/* Nav links — white on hero, dark when scrolled */
+.navbar__links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 42px;
+}
+
+.nav-link {
+  font-family: var(--font-u);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  padding-bottom: 2px;
+  border-bottom: 1px solid transparent;
+  transition: color 0.25s, border-color 0.25s;
+}
+
+.navbar--scrolled .nav-link {
+  color: var(--charcoal);
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--gold-lt) !important;
+  border-bottom-color: var(--gold) !important;
+}
+
+/* Social icons */
+.navbar__social {
+  width: 130px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.social-icon {
+  color: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  transition: color 0.25s, transform 0.25s;
+}
+
+.navbar--scrolled .social-icon {
+  color: var(--mid);
+}
+
+.social-icon:hover {
+  color: var(--gold) !important;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .navbar__links { display: none; }
+  .navbar { padding: 0 20px; }
+}
