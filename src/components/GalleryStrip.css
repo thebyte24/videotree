@@ -42,5 +42,6 @@
 
 @media (max-width: 768px) {
   .gallery-strip { grid-template-columns: repeat(2, 1fr); height: auto; }
-  .gallery-strip__col { height: 50vw; }
+  .gallery-strip__col { height: 44vw; border-right: none; border-bottom: 3px solid var(--white); }
+  .gallery-strip__col:nth-child(odd) { border-right: 3px solid var(--white); }
 }

@@ -181,6 +181,11 @@
 }
 
 @media (max-width: 768px) {
-  .hero__left { left: 24px; }
-  .hero__title-main { font-size: clamp(2rem, 10vw, 3rem); }
+  .hero__left { display: none; }
+  .hero__title { bottom: 22%; left: 50%; transform: translateX(-50%); width: 90%; }
+  .hero__title-main { font-size: clamp(1.8rem, 9vw, 2.8rem); white-space: normal; text-align: center; }
+  .hero__title-tag { font-size: clamp(1rem, 4vw, 1.4rem); }
+  .carousel__btn--prev { left: 10px; }
+  .carousel__btn--next { right: 10px; }
+  .carousel__btn { width: 34px; height: 34px; }
 }

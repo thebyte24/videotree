@@ -196,7 +196,12 @@
 }
 
 @media (max-width: 600px) {
+  .edp { padding-top: 60px; }
   .edp__grid { grid-template-columns: repeat(2, 1fr); }
-  .edp__tabs { gap: 18px; flex-wrap: wrap; }
-  .edp__header { padding: 40px 6% 28px; }
+  .edp__tabs { gap: 12px; flex-wrap: wrap; padding: 0 4% 24px; }
+  .edp__tab { font-size: 0.52rem; }
+  .edp__header { padding: 32px 5% 24px; }
+  .edp__title { letter-spacing: 0.14em; }
+  .edp__story { padding: 48px 5% 60px; }
+  .edp__cta { font-size: 0.56rem; padding: 12px 20px; text-align: center; }
 }

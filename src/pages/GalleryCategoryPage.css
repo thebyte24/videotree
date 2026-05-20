@@ -128,12 +128,15 @@
     grid-template-columns: repeat(2, 1fr);
   }
   .gcpage__hero {
-    height: 55vh;
+    height: 50vh;
+    min-height: 280px;
   }
+  .gcpage__hero-title { letter-spacing: 0.18em; }
 }
 
 @media (max-width: 480px) {
   .gcpage__grid {
     grid-template-columns: 1fr;
   }
+  .gcpage__hero-content { padding-bottom: 40px; }
 }

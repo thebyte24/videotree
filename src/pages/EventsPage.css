@@ -64,9 +64,10 @@
 }
 
 @media (max-width: 900px) {
-  .ep__grid { grid-template-columns: repeat(2, 1fr); }
+  .ep__grid { grid-template-columns: repeat(2, 1fr); gap: 32px 24px; }
 }
 
 @media (max-width: 560px) {
-  .ep__grid { grid-template-columns: 1fr; padding: 0 5% 60px; }
+  .ep { padding-top: 80px; }
+  .ep__grid { grid-template-columns: 1fr; padding: 0 5% 60px; gap: 36px; }
 }

@@ -148,10 +148,11 @@
 }
 
 @media (max-width: 768px) {
+  .cp { padding-top: 60px; }
   .cp__body {
     grid-template-columns: 1fr;
     gap: 40px;
-    padding: 50px 6% 60px;
+    padding: 40px 5% 50px;
   }
   .cp__form {
     padding-top: 0;
@@ -160,4 +161,7 @@
     max-width: 100%;
     aspect-ratio: 4 / 3;
   }
+  .cp__title { font-size: clamp(1.6rem, 7vw, 2.4rem); margin-bottom: 24px; }
+  .cp__map iframe { height: 300px; }
+  .cp__send { align-self: stretch; text-align: center; }
 }

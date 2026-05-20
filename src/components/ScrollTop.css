@@ -19,3 +19,7 @@
   border-color: var(--gold);
   color: var(--gold);
 }
+
+@media (max-width: 768px) {
+  .scroll-top { bottom: 24px; right: 16px; width: 42px; height: 42px; }
+}

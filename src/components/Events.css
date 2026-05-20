@@ -98,8 +98,10 @@
 }
 
 @media (max-width: 768px) {
+  .events { padding: 60px 5% 80px; }
   .events__grid { grid-template-columns: 1fr; }
   .event-item--right { margin-top: 0; }
   .event-item--large .event-item__img-wrap,
   .event-item--small .event-item__img-wrap { height: 56vw; }
+  .events__heading { margin-bottom: 40px; }
 }
