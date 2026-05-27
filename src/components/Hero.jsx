@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import './Hero.css'
 
 const slides = [
@@ -11,48 +12,20 @@ const slides = [
 ]
 
 const categories = [
-  { name: 'Weddings' },
-  { name: 'Shoots' },
-  { name: 'Ceremonies' },
-  { name: 'Birthdays' },
+  { name: 'Weddings',    slug: 'weddings' },
+  { name: 'Engagement',  slug: 'engagement' },
+  { name: 'Haldi',       slug: 'haldi' },
+  { name: 'Pre-Wedding', slug: 'pre-wedding' },
+  { name: 'Half Saree',  slug: 'half-saree' },
+  { name: 'Baby Shoots', slug: 'baby-shoots' },
+  { name: 'Ceremonies',  slug: 'ceremonies' },
+  { name: 'Birthdays',   slug: 'birthdays' },
 ]
 
-/* Split text into individual letter spans for staggered reveal */
-function SplitText({ text, className, delay = 0 }) {
-  const letters = Array.from(text)
-  return (
-    <motion.span
-      className={className}
-      initial="hidden"
-      animate="show"
-      variants={{
-        hidden: {},
-        show: { transition: { staggerChildren: 0.045, delayChildren: delay } }
-      }}
-      aria-label={text}
-    >
-      {letters.map((char, i) => (
-        <motion.span
-          key={i}
-          style={{ display: 'inline-block', willChange: 'transform, opacity' }}
-          variants={{
-            hidden: { opacity: 0, y: 28, rotateX: -40 },
-            show:   { opacity: 1, y: 0,  rotateX: 0,
-              transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
-            }
-          }}
-        >
-          {char === ' ' ? '\u00A0' : char}
-        </motion.span>
-      ))}
-    </motion.span>
-  )
-}
-
 export default function Hero() {
-  const [current,   setCurrent]   = useState(0)
-  const [paused,    setPaused]    = useState(false)
-  const [activeCat, setActiveCat] = useState(0)
+  const [current, setCurrent] = useState(0)
+  const [paused,  setPaused]  = useState(false)
+  const navigate = useNavigate()
 
   const next = useCallback(() => setCurrent(c => (c + 1) % slides.length), [])
   const prev = useCallback(() => setCurrent(c => (c - 1 + slides.length) % slides.length), [])
@@ -70,7 +43,6 @@ export default function Hero() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-
       {/* Full-screen crossfade slides */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -84,7 +56,7 @@ export default function Hero() {
         />
       </AnimatePresence>
 
-      {/* Category list — floats over image on the left */}
+      {/* Category list */}
       <motion.div
         className="hero__left"
         initial={{ opacity: 0, x: -40 }}
@@ -92,32 +64,17 @@ export default function Hero() {
         transition={{ duration: 1, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
       >
         <ul className="category-list">
-          {categories.map((c, i) => (
+          {categories.map((c) => (
             <li
-              key={c.name}
-              className={`category-item ${activeCat === i ? 'active' : ''}`}
-              onClick={() => setActiveCat(i)}
+              key={c.slug}
+              className="category-item"
+              onClick={() => navigate(`/galleries/${c.slug}`)}
             >
               <span className="cat-name">{c.name}</span>
             </li>
           ))}
         </ul>
       </motion.div>
-
-      {/* Studio name — letter-by-letter reveal */}
-      <div className="hero__title">
-        <h1 className="hero__title-main">
-          <SplitText text="VIDEO TREE" delay={0.3} />
-        </h1>
-        <motion.p
-          className="hero__title-tag"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 1.1, ease: [0.22, 1, 0.36, 1] }}
-        >
-          Crafting Stories, Frame by Frame
-        </motion.p>
-      </div>
 
       {/* Prev / Next */}
       <button className="carousel__btn carousel__btn--prev" onClick={prev} aria-label="Previous">
@@ -142,7 +99,6 @@ export default function Hero() {
           />
         ))}
       </div>
-
     </section>
   )
 }

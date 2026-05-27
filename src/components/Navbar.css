@@ -2,24 +2,24 @@
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 300;
-  height: 60px;
+  height: 120px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 44px;
-  /* Fully transparent over hero */
   background: transparent;
   border-bottom: none;
-  transition: background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease;
+  transition: background 0.5s ease, box-shadow 0.5s ease, border-color 0.5s ease, height 0.4s ease, backdrop-filter 0.5s ease;
 }
 
-/* Becomes white/frosted when scrolled past hero */
+/* Glassmorphism when scrolled */
 .navbar--scrolled {
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 2px 24px rgba(0,0,0,0.06);
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  height: 70px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 /* Logo — white on hero, dark when scrolled */
@@ -36,15 +36,20 @@
   color: var(--charcoal);
 }
 
-  .navbar__logo { width: 180px; }
+  .navbar__logo { width: 200px; }
 
   .navbar__logo-img {
-    height: 150px;
+    height: 160px;
     width: auto;
     object-fit: contain;
     display: block;
-    margin-top: 120px;
-    margin-left: -60px;
+    padding-top: 16px;
+    transition: height 0.4s ease, padding-top 0.4s ease;
+  }
+
+  .navbar--scrolled .navbar__logo-img {
+    height: 55px;
+    padding-top: 0;
   }
 
 /* Nav links — white on hero, dark when scrolled */
@@ -70,7 +75,7 @@
 }
 
 .navbar--scrolled .nav-link {
-  color: var(--charcoal);
+  color: rgba(255,255,255,0.9);
 }
 
 .nav-link:hover,
@@ -95,7 +100,7 @@
 }
 
 .navbar--scrolled .social-icon {
-  color: var(--mid);
+  color: rgba(255,255,255,0.8);
 }
 
 .social-icon:hover {
@@ -141,7 +146,7 @@
   /* Mobile full-screen menu */
   .mobile-menu {
     position: fixed;
-    top: 60px;
+    top: 90px;
     left: 0; right: 0;
     background: rgba(255,255,255,0.97);
     backdrop-filter: blur(16px);

@@ -6,6 +6,7 @@ import Events from './components/Events'
 import GalleryStrip from './components/GalleryStrip'
 import InstaCTA from './components/InstaCTA'
 import Footer from './components/Footer'
+import Reviews from './components/Reviews'
 import ScrollTop from './components/ScrollTop'
 import WhatsAppButton from './components/WhatsAppButton'
 import GalleryPage from './pages/GalleryPage'
@@ -22,6 +23,7 @@ function Home() {
       <Hero />
       <About />
       <Events />
+      <Reviews />
       <GalleryStrip />
       <InstaCTA />
       <Footer />

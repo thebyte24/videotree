@@ -37,10 +37,13 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 18px;
 }
 
-.category-item { cursor: pointer; }
+.category-item {
+  cursor: pointer;
+  pointer-events: all;
+}
 
 .cat-num {
   display: block;
@@ -92,6 +95,14 @@
   color: rgba(255,255,255,0.92);
   text-shadow: 0 2px 40px rgba(0,0,0,0.3);
   line-height: 1;
+}
+
+.hero__logo {
+  width: clamp(220px, 30vw, 380px);
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 4px 24px rgba(0,0,0,0.4));
 }
 
 .hero__title-tag {

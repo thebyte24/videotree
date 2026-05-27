@@ -49,7 +49,7 @@ export default function ContactPage() {
           >
             <div className="cp__info-item">
               <p className="cp__info-label">Email</p>
-              <p className="cp__info-value">hello@videotree.in</p>
+              <p className="cp__info-value">videotree2015@gmail.com</p>
             </div>
             <div className="cp__info-item">
               <p className="cp__info-label">Address</p>
@@ -57,17 +57,17 @@ export default function ContactPage() {
             </div>
             <div className="cp__info-item">
               <p className="cp__info-label">Call Us</p>
-              <p className="cp__info-value">+91 99663 12342</p>
+              <p className="cp__info-value">+91 88855 59655</p>
             </div>
             <div className="cp__info-item">
               <p className="cp__info-label">WhatsApp</p>
               <a
-                href="https://wa.me/919966312342"
+                href="https://wa.me/918885559655"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="cp__info-value cp__info-link"
               >
-                +91 99663 12342
+                +91 88855 59655
               </a>
             </div>
           </motion.div>
