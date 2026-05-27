@@ -1,0 +1,39 @@
+/* App-level resets — component styles live in their own .css files */
+#root { min-height: 100vh; }
+
+/* ── Global page loading spinner ─────────────────────────────────────────── */
+.page-spinner {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #222;
+  border-top-color: #c9a96e;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.gallery-page--loading,
+.gcpage--loading,
+.ep--loading,
+.edp--loading {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+}
+
+.admin-dash--loading {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a0a;
+  color: #888;
+  gap: 16px;
+  font-size: 0.9rem;
+}
