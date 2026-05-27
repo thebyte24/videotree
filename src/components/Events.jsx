@@ -1,34 +1,12 @@
 import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
+import { events as allEvents } from '../data/events'
 import './Events.css'
 
-const events = [
-  {
-    img: 'https://images.unsplash.com/photo-1622495966027-e0173192c728?w=900&q=85',
-    location: 'Hyderabad, Telangana',
-    couple: 'Arjun & Priya',
-    side: 'left', size: 'large', from: 'left'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1529636798458-92182e662485?w=900&q=85',
-    location: 'Visakhapatnam, Andhra',
-    couple: 'Rahul & Divya',
-    side: 'right', size: 'small', from: 'right'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=900&q=85',
-    location: 'Visakhapatnam, Andhra',
-    couple: 'Kiran & Meghana',
-    side: 'left', size: 'small', from: 'left'
-  },
-  {
-    img: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=900&q=85',
-    location: 'Visakhapatnam, Andhra',
-    couple: 'Jaswanth & Praharshitha',
-    side: 'right', size: 'large', from: 'right'
-  },
-]
-
 export default function Events() {
+  const navigate = useNavigate()
+  const featured = allEvents.slice(0, 4)
+
   return (
     <section id="events" className="events">
 
@@ -43,19 +21,20 @@ export default function Events() {
       </motion.h2>
 
       <div className="events__grid">
-        {events.map((e, i) => (
+        {featured.map((e, i) => (
           <motion.div
-            key={i}
-            className={`event-item event-item--${e.side} event-item--${e.size}`}
-            initial={{ opacity: 0, x: e.from === 'left' ? -60 : 60 }}
+            key={e.slug}
+            className={`event-item event-item--${i % 2 === 0 ? 'left' : 'right'} event-item--${i % 2 === 0 ? 'large' : 'small'}`}
+            style={{ cursor: 'pointer' }}
+            onClick={() => navigate(`/events/${e.slug}`)}
+            initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.15 }}
             transition={{ duration: 0.85, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Image wrapper — overflow hidden + scale reveal */}
             <div className="event-item__img-wrap">
               <motion.img
-                src={e.img}
+                src={e.coverImage}
                 alt={e.couple}
                 loading="lazy"
                 className="event-item__img"

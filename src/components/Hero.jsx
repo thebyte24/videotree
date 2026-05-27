@@ -11,10 +11,10 @@ const slides = [
 ]
 
 const categories = [
-  { num: '01', name: 'Weddings' },
-  { num: '02', name: 'Shoots' },
-  { num: '03', name: 'Ceremonies' },
-  { num: '04', name: 'Birthdays' },
+  { name: 'Weddings' },
+  { name: 'Shoots' },
+  { name: 'Ceremonies' },
+  { name: 'Birthdays' },
 ]
 
 /* Split text into individual letter spans for staggered reveal */
@@ -94,11 +94,10 @@ export default function Hero() {
         <ul className="category-list">
           {categories.map((c, i) => (
             <li
-              key={c.num}
+              key={c.name}
               className={`category-item ${activeCat === i ? 'active' : ''}`}
               onClick={() => setActiveCat(i)}
             >
-              <span className="cat-num">{c.num}</span>
               <span className="cat-name">{c.name}</span>
             </li>
           ))}
@@ -131,15 +130,6 @@ export default function Hero() {
           <polyline points="9 18 15 12 9 6"/>
         </svg>
       </button>
-
-      {/* Counter */}
-      <div className="carousel__counter">
-        <span className="c-line" />
-        <span>{String(current + 1).padStart(2, '0')}</span>
-        <span className="c-line" />
-        <span>05</span>
-        <span className="c-line" />
-      </div>
 
       {/* Dots */}
       <div className="carousel__dots">

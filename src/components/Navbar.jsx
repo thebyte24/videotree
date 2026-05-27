@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
+import logoImg from '../assets/videotreetransparent.png'
 import './Navbar.css'
 
 export default function Navbar() {
@@ -55,7 +56,9 @@ export default function Navbar() {
       >
         {/* Logo */}
         <div className="navbar__logo">
-          <Link to="/" className="navbar__logo-text">VIDEO TREE</Link>
+          <Link to="/">
+            <img src={logoImg} alt="Video Tree" className="navbar__logo-img" />
+          </Link>
         </div>
 
         {/* Desktop nav links */}
