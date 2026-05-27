@@ -247,17 +247,9 @@
   /* Hide desktop arrows */
   .carousel__btn { display: none; }
 
-  /* Show mobile logo + tagline at top center */
+  /* Hide mobile logo + tagline */
   .hero__mobile-top {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: absolute;
-    top: 110px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    width: 90%;
+    display: none;
   }
 
   /* Show category pills at bottom */
