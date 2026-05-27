@@ -198,10 +198,28 @@
 @media (max-width: 600px) {
   .edp { padding-top: 60px; }
   .edp__grid { grid-template-columns: repeat(2, 1fr); }
-  .edp__tabs { gap: 12px; flex-wrap: wrap; padding: 0 4% 24px; }
-  .edp__tab { font-size: 0.52rem; }
-  .edp__header { padding: 32px 5% 24px; }
-  .edp__title { letter-spacing: 0.14em; }
-  .edp__story { padding: 48px 5% 60px; }
-  .edp__cta { font-size: 0.56rem; padding: 12px 20px; text-align: center; }
+  .edp__tabs {
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 0 4% 20px;
+    justify-content: center;
+  }
+  .edp__tab {
+    font-size: 0.5rem;
+    padding: 6px 10px;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 999px;
+    border-bottom: none;
+  }
+  .edp__tab--active {
+    background: var(--charcoal);
+    color: var(--white);
+    border-color: var(--charcoal);
+  }
+  .edp__header { padding: 28px 5% 20px; }
+  .edp__title { letter-spacing: 0.1em; }
+  .edp__story { padding: 40px 5% 50px; }
+  .edp__cta { font-size: 0.54rem; padding: 12px 16px; text-align: center; }
+  .edp__ctas { width: 100%; }
+  .edp__cta--book { width: 100%; justify-content: center; }
 }

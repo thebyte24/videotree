@@ -218,7 +218,10 @@
 
 @media (max-width: 760px) {
   .about { flex-direction: column; padding: 60px 6%; gap: 24px; align-items: center; }
-  .about__card { width: 100%; max-width: 100%; height: 280px; }
+  .about__card { width: 100%; max-width: 100%; height: auto; min-height: 260px; }
+  .about__card-frame { width: 100px; height: 130px; left: 16px; }
+  .about__card-text { left: 130px; }
   .about__bio { width: 100%; max-width: 100%; height: auto; padding: 36px 28px; }
   .stats-bar { flex-wrap: wrap; gap: 24px 32px; padding: 30px 6% 50px; }
+  .stats-bar__num { font-size: clamp(2rem, 10vw, 3.5rem); }
 }

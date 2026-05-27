@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
+import logoImg from '../assets/videotreetransparent.png'
 import './Hero.css'
 
 const slides = [
@@ -56,7 +57,7 @@ export default function Hero() {
         />
       </AnimatePresence>
 
-      {/* Category list */}
+      {/* DESKTOP: category list on the left */}
       <motion.div
         className="hero__left"
         initial={{ opacity: 0, x: -40 }}
@@ -76,7 +77,36 @@ export default function Hero() {
         </ul>
       </motion.div>
 
-      {/* Prev / Next */}
+      {/* MOBILE: logo centered top + tagline */}
+      <motion.div
+        className="hero__mobile-top"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.4 }}
+      >
+        <img src={logoImg} alt="Video Tree" className="hero__mobile-logo" />
+        <p className="hero__mobile-tag">Crafting Stories, Frame by Frame</p>
+      </motion.div>
+
+      {/* MOBILE: category pills at bottom */}
+      <motion.div
+        className="hero__mobile-cats"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.9, delay: 0.8 }}
+      >
+        {categories.map((c) => (
+          <button
+            key={c.slug}
+            className="hero__mobile-pill"
+            onClick={() => navigate(`/galleries/${c.slug}`)}
+          >
+            {c.name}
+          </button>
+        ))}
+      </motion.div>
+
+      {/* Prev / Next — desktop only */}
       <button className="carousel__btn carousel__btn--prev" onClick={prev} aria-label="Previous">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
           <polyline points="15 18 9 12 15 6"/>

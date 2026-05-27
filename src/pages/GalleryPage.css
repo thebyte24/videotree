@@ -80,12 +80,14 @@
 }
 
 @media (max-width: 768px) {
+  .gallery-page { padding-top: 90px; }
   .gallery-page__section {
-    height: 55vh;
-    min-height: 280px;
+    height: 60vh;
+    min-height: 260px;
   }
   .gallery-page__title {
-    font-size: clamp(1.8rem, 8vw, 2.4rem);
-    letter-spacing: 0.18em;
+    font-size: clamp(1.6rem, 8vw, 2.2rem);
+    letter-spacing: 0.14em;
   }
+  .gallery-page__cta { font-size: 0.7rem; padding: 6px 0; }
 }

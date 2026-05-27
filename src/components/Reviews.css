@@ -97,3 +97,9 @@
   color: var(--mid);
   font-style: italic;
 }
+
+@media (max-width: 768px) {
+  .reviews { padding: 60px 0 40px; }
+  .reviews__title { font-size: 1.4rem; }
+  .reviews__card { width: 260px; padding: 22px 18px; }
+}
