@@ -17,9 +17,57 @@ const categoryData = {
       'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&q=85',
     ],
   },
-  shoots: {
-    label: 'Shoots',
-    description: 'Creative portrait and couple shoots full of emotion.',
+  engagement: {
+    label: 'Engagement',
+    description: 'Beautiful engagement moments filled with love and joy.',
+    photos: [
+      'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&q=85',
+      'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=85',
+      'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&q=85',
+      'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&q=85',
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=85',
+      'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=85',
+    ],
+  },
+  haldi: {
+    label: 'Haldi',
+    description: 'Vibrant and colourful haldi ceremonies captured beautifully.',
+    photos: [
+      'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=85',
+      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=85',
+      'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&q=85',
+      'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=85',
+      'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=85',
+      'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=800&q=85',
+    ],
+  },
+  'pre-wedding': {
+    label: 'Pre-Wedding',
+    description: 'Romantic pre-wedding stories told through stunning frames.',
+    photos: [
+      'https://images.unsplash.com/photo-1519741497674-611481863552?w=800&q=85',
+      'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=800&q=85',
+      'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=85',
+      'https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=800&q=85',
+      'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800&q=85',
+      'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=800&q=85',
+    ],
+  },
+  'half-saree': {
+    label: 'Half Saree',
+    description: 'Elegant half saree ceremonies marking a special milestone.',
+    photos: [
+      'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=800&q=85',
+      'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=85',
+      'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&q=85',
+      'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=800&q=85',
+      'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=800&q=85',
+      'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=85',
+    ],
+  },
+  'baby-shoots': {
+    label: 'Baby Shoots',
+    description: 'Adorable baby moments captured with warmth and care.',
     photos: [
       'https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=800&q=85',
       'https://images.unsplash.com/photo-1529636798458-92182e662485?w=800&q=85',

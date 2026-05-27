@@ -11,8 +11,28 @@ const categories = [
     image: 'https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=1400&q=90',
   },
   {
-    slug: 'shoots',
-    label: 'SHOOTS',
+    slug: 'engagement',
+    label: 'ENGAGEMENT',
+    image: 'https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?w=1400&q=90',
+  },
+  {
+    slug: 'haldi',
+    label: 'HALDI',
+    image: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1400&q=90',
+  },
+  {
+    slug: 'pre-wedding',
+    label: 'PRE-WEDDING',
+    image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=90',
+  },
+  {
+    slug: 'half-saree',
+    label: 'HALF SAREE',
+    image: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1400&q=90',
+  },
+  {
+    slug: 'baby-shoots',
+    label: 'BABY SHOOTS',
     image: 'https://images.unsplash.com/photo-1550005809-91ad75fb315f?w=1400&q=90',
   },
   {
