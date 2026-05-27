@@ -66,7 +66,7 @@ export default function Navbar() {
           {navLinks}
         </nav>
 
-        {/* Desktop social icons */}
+        {/* Desktop social icons + admin */}
         <div className="navbar__social">
           <a href="https://www.instagram.com/videotree.co.in?igsh=MW5razBuOGJnaWs1eg==" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="social-icon">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -81,6 +81,19 @@ export default function Navbar() {
               <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/>
             </svg>
           </a>
+
+          {/* Admin access — subtle lock icon */}
+          <button
+            className="navbar__admin-btn"
+            onClick={() => navigate('/admin')}
+            aria-label="Admin"
+            title="Admin Panel"
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </button>
         </div>
 
         {/* Hamburger — mobile only */}

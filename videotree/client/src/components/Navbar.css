@@ -89,6 +89,7 @@
   width: 130px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 16px;
 }
 
@@ -105,6 +106,23 @@
 
 .social-icon:hover {
   color: var(--gold) !important;
+  transform: translateY(-2px);
+}
+
+/* Admin lock button */
+.navbar__admin-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255,255,255,0.4);
+  display: flex;
+  align-items: center;
+  padding: 4px;
+  transition: color 0.25s, transform 0.25s;
+}
+
+.navbar__admin-btn:hover {
+  color: var(--gold);
   transform: translateY(-2px);
 }
 
