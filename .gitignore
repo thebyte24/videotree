@@ -1,24 +1,20 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
 
-node_modules
-dist
-dist-ssr
-*.local
+# Build output
+client/dist/
+client/.vite/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Environment variables
+.env
+client/.env
+server/.env
+
+# Uploads (real photos — back these up separately)
+server/uploads/
+
+# OS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+Thumbs.db
