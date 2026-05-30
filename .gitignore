@@ -15,6 +15,17 @@ server/.env
 # Uploads (real photos — back these up separately)
 server/uploads/
 
+# Videos — too large for git
+*.mp4
+*.webm
+*.mov
+
+# Temp deploy folders
+godaddy-deploy/
+videotree-mysql-server.zip
+videotree-source.zip
+videotree-godaddy.zip
+
 # OS
 .DS_Store
 Thumbs.db
