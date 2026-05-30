@@ -7,8 +7,8 @@ const { initDB } = require('./db')
 const app = express()
 
 app.use(cors({
-  origin: (process.env.CLIENT_URL || '*').trim(),
-  credentials: true,
+  origin: '*',
+  credentials: false,
 }))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
@@ -23,6 +23,7 @@ app.use('/api/galleries', require('./routes/galleries'))
 app.use('/api/events',    require('./routes/events'))
 app.use('/api/config',    require('./routes/config'))
 
+app.get('/', (_req, res) => res.json({ status: 'ok', app: 'VideoTree API' }))
 app.get('/api/health', (_req, res) => res.json({ status: 'ok' }))
 
 app.use((err, _req, res, _next) => {
