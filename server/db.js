@@ -21,9 +21,9 @@ async function initDB() {
       location   VARCHAR(255) DEFAULT '',
       date       VARCHAR(100) DEFAULT '',
       tagline    VARCHAR(500) DEFAULT '',
-      story      JSON DEFAULT NULL,
+      story      JSON,
       coverImage VARCHAR(500) DEFAULT '',
-      sections   JSON DEFAULT NULL,
+      sections   JSON,
       \`order\`  INT DEFAULT 0,
       createdAt  DATETIME DEFAULT CURRENT_TIMESTAMP,
       updatedAt  DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -35,9 +35,9 @@ async function initDB() {
       id          INT AUTO_INCREMENT PRIMARY KEY,
       slug        VARCHAR(255) NOT NULL UNIQUE,
       label       VARCHAR(255) NOT NULL,
-      description TEXT DEFAULT '',
+      description TEXT,
       coverImage  VARCHAR(500) DEFAULT '',
-      photos      JSON DEFAULT NULL,
+      photos      JSON,
       \`order\`   INT DEFAULT 0,
       createdAt   DATETIME DEFAULT CURRENT_TIMESTAMP,
       updatedAt   DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
