@@ -7,7 +7,7 @@ const { initDB } = require('./db')
 const app = express()
 
 app.use(cors({
-  origin: process.env.CLIENT_URL || '*',
+  origin: (process.env.CLIENT_URL || '*').trim(),
   credentials: true,
 }))
 app.use(express.json({ limit: '10mb' }))
