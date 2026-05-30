@@ -5,11 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev:client": "npm run dev --prefix client",
-    "dev:server": "npm run dev --prefix server",
-    "dev": "npm run dev:server & npm run dev:client",
-    "build": "npm run build --prefix client",
-    "install:all": "npm install --prefix client && npm install --prefix server",
+    "local:client": "npm run dev --prefix client",
+    "local:server": "npm run dev --prefix server",
+    "local": "npm run local:server & npm run local:client",
+    "build": "echo 'No build step'",
     "seed": "node server/seed.js"
   },
   "dependencies": {
