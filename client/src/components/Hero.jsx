@@ -2,8 +2,6 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import logoImg from '../assets/videotreetransparent.png'
-import thaliVideo from '../assets/Thali.mp4'
-import thalambraluVideo from '../assets/Thalambralu.mp4'
 import { apiGetConfig } from '../api/client'
 import './Hero.css'
 
@@ -19,8 +17,6 @@ const categories = [
 ]
 
 const FALLBACK_SLIDES = [
-  { type: 'video', url: thaliVideo },
-  { type: 'video', url: thalambraluVideo },
   { type: 'image', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1800&q=90' },
   { type: 'image', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1800&q=90' },
   { type: 'image', url: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1800&q=90' },
