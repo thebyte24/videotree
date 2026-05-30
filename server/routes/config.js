@@ -1,28 +1,31 @@
 const express      = require('express')
 const router       = express.Router()
-const SiteConfig   = require('../models/SiteConfig')
+const { pool }     = require('../db')
 const requireAdmin = require('../middleware/auth')
 
-// GET /api/config/:key — get a config value (public)
+// GET /api/config/:key
 router.get('/:key', async (req, res) => {
   try {
-    const doc = await SiteConfig.findOne({ key: req.params.key })
-    if (!doc) return res.status(404).json({ error: 'Config not found' })
-    res.json({ key: doc.key, value: doc.value })
+    const [rows] = await pool.execute('SELECT * FROM site_config WHERE `key` = ?', [req.params.key])
+    if (!rows.length) return res.status(404).json({ error: 'Config not found' })
+    const r = rows[0]
+    res.json({ key: r.key, value: JSON.parse(r.value) })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }
 })
 
-// PUT /api/config/:key — set a config value (admin)
+// PUT /api/config/:key
 router.put('/:key', requireAdmin, async (req, res) => {
   try {
-    const doc = await SiteConfig.findOneAndUpdate(
-      { key: req.params.key },
-      { $set: { value: req.body.value } },
-      { new: true, upsert: true }
+    await pool.execute(
+      `INSERT INTO site_config (\`key\`, value) VALUES (?,?)
+       ON DUPLICATE KEY UPDATE value=VALUES(value)`,
+      [req.params.key, JSON.stringify(req.body.value)]
     )
-    res.json({ key: doc.key, value: doc.value })
+    const [rows] = await pool.execute('SELECT * FROM site_config WHERE `key` = ?', [req.params.key])
+    const r = rows[0]
+    res.json({ key: r.key, value: JSON.parse(r.value) })
   } catch (err) {
     res.status(400).json({ error: err.message })
   }

@@ -16,7 +16,7 @@ async function uploadFiles(files) {
 }
 
 // ── Image Upload + List Editor ───────────────────────────────────────────────
-function ImageListEditor({ images, onChange, label }) {
+function ImageListEditor({ images, onChange, label, accept = 'image/*' }) {
   const inputRef   = useRef(null)
   const [dragging, setDragging]   = useState(false)
   const [uploading, setUploading] = useState(false)
@@ -68,7 +68,7 @@ function ImageListEditor({ images, onChange, label }) {
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept={accept}
           multiple
           style={{ display: 'none' }}
           onChange={handleFileInput}
@@ -88,7 +88,7 @@ function ImageListEditor({ images, onChange, label }) {
             <p className="img-editor__drop-text">
               <strong>Click to upload</strong> or drag & drop
             </p>
-            <p className="img-editor__drop-sub">JPG, PNG, WEBP — multiple files supported</p>
+            <p className="img-editor__drop-sub">{accept.includes('video') ? 'JPG, PNG, WEBP, MP4, WEBM — multiple files supported' : 'JPG, PNG, WEBP — multiple files supported'}</p>
           </>
         )}
       </div>
@@ -350,8 +350,10 @@ export default function AdminDashboard() {
         {tab === 0 && (
           <div className="admin-section">
             <h2 className="admin-section__title">Homepage Hero Slideshow</h2>
-            <p className="admin-section__desc">These images cycle in the full-screen hero carousel on the homepage.</p>
-            <ImageListEditor images={heroSlides} onChange={setHeroSlides} label="Hero Slide Images" />
+            <p className="admin-section__desc">
+              Upload photos <strong>or videos</strong> (mp4, webm) — they all cycle in the hero carousel. Videos autoplay muted.
+            </p>
+            <ImageListEditor images={heroSlides} onChange={setHeroSlides} label="Hero Slides (images + videos)" accept="image/*,video/*" />
             <button className="admin-save-btn" onClick={saveHero}>Save Hero Slides</button>
           </div>
         )}
