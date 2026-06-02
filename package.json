@@ -1,0 +1,21 @@
+{
+  "name": "videotree",
+  "version": "1.0.0",
+  "description": "VideoTree — Wedding Photography Studio. MERN stack.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "local:client": "npm run dev --prefix client",
+    "local:server": "npm run dev --prefix server",
+    "local": "npm run local:server & npm run local:client",
+    "build": "echo 'No build step'",
+    "seed": "node server/seed.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.9.7"
+  }
+}
