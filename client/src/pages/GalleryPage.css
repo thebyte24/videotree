@@ -1,0 +1,100 @@
+.gallery-page {
+  padding-top: 60px;
+  background: #111;
+}
+
+.gallery-page__section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px solid #000;
+}
+
+/* Photo fills naturally — no fixed height, no crop */
+.gallery-page__bg {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-page__section:hover .gallery-page__bg {
+  transform: scale(1.03);
+}
+
+.gallery-page__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.08) 0%,
+    rgba(0,0,0,0.45) 65%,
+    rgba(0,0,0,0.65) 100%
+  );
+}
+
+.gallery-page__content {
+  position: absolute;
+  bottom: 10%;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.gallery-page__title {
+  font-family: var(--font-d);
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  font-weight: 300;
+  letter-spacing: 0.28em;
+  color: #fff;
+  text-shadow: 0 2px 24px rgba(0,0,0,0.3);
+  line-height: 1;
+}
+
+.gallery-page__cta {
+  font-family: var(--font-u);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: none;
+  color: rgba(255,255,255,0.88);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.45);
+  transition: color 0.25s, border-color 0.25s;
+  font-style: italic;
+}
+
+.gallery-page__cta:hover {
+  color: var(--gold-lt);
+  border-bottom-color: var(--gold);
+}
+
+@media (max-width: 768px) {
+  .gallery-page { padding-top: 80px; }
+  .gallery-page__title {
+    font-size: clamp(1.6rem, 8vw, 2.2rem);
+    letter-spacing: 0.14em;
+  }
+  .gallery-page__cta { font-size: 0.7rem; padding: 6px 0; }
+}
+
+@media (max-width: 480px) {
+  .gallery-page { padding-top: 70px; }
+  .gallery-page__title {
+    font-size: clamp(1.3rem, 9vw, 1.8rem);
+    letter-spacing: 0.1em;
+  }
+  .gallery-page__content { gap: 10px; }
+}

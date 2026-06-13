@@ -1,0 +1,68 @@
+name: Deploy Backend to GoDaddy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to GoDaddy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT || 21098 }}
+          timeout: 60s
+          command_timeout: 10m
+          script: |
+            set -e
+            echo "→ Connected to server"
+
+            cd ~
+
+            # Clone or pull latest code
+            if [ -d "videotree" ]; then
+              cd videotree
+              echo "→ Pulling latest code..."
+              git fetch origin main
+              git reset --hard origin/main
+            else
+              echo "→ Cloning repo..."
+              git clone https://github.com/thebyte24/videotree.git videotree
+              cd videotree
+            fi
+
+            echo "→ Installing server dependencies..."
+            cd server
+            npm install --production
+            cd ..
+
+            echo "→ Installing client dependencies & building..."
+            cd client
+            npm install
+            npm run build
+            cd ..
+
+            # Install PM2 globally if missing
+            if ! command -v pm2 &> /dev/null; then
+              echo "→ Installing PM2..."
+              npm install -g pm2
+            fi
+
+            echo "→ Restarting app..."
+            if pm2 describe videotree-server > /dev/null 2>&1; then
+              pm2 restart videotree-server
+            else
+              pm2 start server.js --name videotree-server
+            fi
+
+            pm2 save
+            echo "✓ Deployment complete"

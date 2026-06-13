@@ -1,0 +1,33 @@
+.gallery-strip {
+  columns: 4;
+  column-gap: 4px;
+  padding: 4px;
+  background: #111;
+  position: relative;
+  cursor: pointer;
+}
+
+.gallery-strip__col {
+  break-inside: avoid;
+  margin-bottom: 4px;
+  overflow: hidden;
+  display: block;
+  background: #111;
+}
+
+.gallery-strip__col img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.gallery-strip__col:hover img { transform: scale(1.03); }
+
+/* Botanical */
+.botanical--strip { display: none; }
+
+@media (max-width: 768px) {
+  .gallery-strip { columns: 2; }
+}
