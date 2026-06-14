@@ -1,0 +1,4 @@
+{
+  "serveCommand": "npm start",
+  "buildCommand": "npm run build"
+}

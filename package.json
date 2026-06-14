@@ -5,10 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "build": "npm install --prefix client && npm run build --prefix client",
-    "local:client": "npm run dev --prefix client",
-    "local:server": "npm run dev --prefix server",
-    "local": "npm run local:server & npm run local:client"
+    "build": "npm install --prefix videotree-main/server && npm install --prefix videotree-main/client && npm run build --prefix videotree-main/client"
   },
   "dependencies": {
     "cors": "^2.8.5",
@@ -16,5 +13,8 @@
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "mysql2": "^3.9.7"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

@@ -1,2 +1,2 @@
-// GoDaddy Node.js entry point — loads the backend server
-require('./server/server.js')
+// Root entry point — delegates to the actual server inside videotree-main
+require('./videotree-main/server/server.js')

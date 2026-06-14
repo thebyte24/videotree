@@ -2,7 +2,7 @@
  * API client — all calls to the Express backend go through here.
  */
 
-const BASE = 'https://videotree.co.in'
+const BASE = import.meta.env.VITE_API_URL ?? ''
 
 function getToken() {
   return sessionStorage.getItem('vt_token') || ''

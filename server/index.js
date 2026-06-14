@@ -8,7 +8,12 @@ const app = express()
 
 // ── Middleware ───────────────────────────────────────────────────────────────
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:4173'],
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'https://videotree.co.in',
+    'https://www.videotree.co.in',
+  ],
   credentials: true,
 }))
 app.use(express.json({ limit: '10mb' }))
