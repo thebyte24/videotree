@@ -2,7 +2,8 @@
  * API client — all calls to the Express backend go through here.
  */
 
-const BASE = import.meta.env.VITE_API_URL ?? ''
+// Always use relative URLs — frontend and backend are served from the same origin
+const BASE = ''
 
 function getToken() {
   return sessionStorage.getItem('vt_token') || ''
