@@ -69,8 +69,14 @@ function ImageListEditor({ images, onChange, onRemove, label, accept = 'image/*'
 
   async function remove(idx) {
     if (!window.confirm('Delete this photo? This cannot be undone.')) return
+    const entry = images[idx]
+    const url = photoUrl(entry)
     const updated = images.filter((_, i) => i !== idx)
     onChange(updated)
+    // Delete the file from the server (fire-and-forget — don't block UI)
+    if (url && url.includes('/uploads/')) {
+      apiDeleteImage(url).catch(() => {/* ignore — file may already be gone */})
+    }
     if (onRemove) await onRemove(updated)
   }
 
@@ -179,15 +185,17 @@ function CoverUploader({ value, onChange }) {
   const inputRef   = useRef(null)
   const [dragging, setDragging]   = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [error, setError]         = useState('')
 
   async function handleFile(file) {
     if (!file || !file.type.startsWith('image/')) return
     setUploading(true)
+    setError('')
     try {
       const urls = await uploadFiles([file])
       onChange(urls[0])
-    } catch {
-      // silently fail — user can retry
+    } catch (e) {
+      setError(e.message || 'Upload failed')
     }
     setUploading(false)
   }
@@ -237,6 +245,7 @@ function CoverUploader({ value, onChange }) {
       {value && (
         <button className="cover-uploader__clear" onClick={() => onChange('')}>Remove</button>
       )}
+      {error && <p className="img-editor__warning" style={{ marginTop: 6 }}>⚠️ {error}</p>}
     </div>
   )
 }

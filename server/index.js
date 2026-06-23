@@ -11,8 +11,11 @@ app.use(cors({ origin: '*' }))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
 
-// Serve uploaded files as static assets
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+// Serve uploaded files — cache for 7 days
+app.use('/uploads', (req, res, next) => {
+  res.set('Cache-Control', 'public, max-age=604800, immutable')
+  next()
+}, express.static(path.join(__dirname, 'uploads')))
 
 // ── Routes ───────────────────────────────────────────────────────────────────
 app.use('/api/auth',      require('./routes/auth'))

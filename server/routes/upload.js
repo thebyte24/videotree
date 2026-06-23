@@ -13,7 +13,10 @@ router.post('/', requireAdmin, upload.array('images', 50), (req, res) => {
     return res.status(400).json({ error: 'No files uploaded' })
   }
 
-  const baseUrl = process.env.PUBLIC_URL || `https://${req.get('host')}`
+  const baseUrl = process.env.PUBLIC_URL
+    || (req.headers['x-forwarded-proto']
+        ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host'] || req.get('host')}`
+        : `${req.protocol}://${req.get('host')}`)
   const urls = req.files.map(
     (f) => `${baseUrl}/uploads/${f.filename}`
   )
@@ -33,8 +36,13 @@ router.delete('/', requireAdmin, (req, res) => {
   const { filename } = req.body
   if (!filename) return res.status(400).json({ error: 'filename required' })
 
+  // Accept either a full URL (/uploads/foo.jpg or https://…/uploads/foo.jpg) or bare filename
+  const bare = filename.includes('/uploads/')
+    ? filename.split('/uploads/').pop()
+    : path.basename(filename)
+
   // Prevent path traversal
-  const safe = path.basename(filename)
+  const safe = path.basename(bare)
   const filePath = path.join(__dirname, '..', 'uploads', safe)
 
   fs.unlink(filePath, (err) => {
