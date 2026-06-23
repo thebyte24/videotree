@@ -9,21 +9,7 @@ const app = express()
 // Trust the reverse proxy (GoDaddy PAAS uses nginx in front)
 app.set('trust proxy', 1)
 
-app.use(cors({
-  origin: (origin, callback) => {
-    // Allow same-origin (no Origin header) and known domains
-    if (!origin) return callback(null, true)
-    const allowed = [
-      /^https:\/\/videotree\.co\.in$/,
-      /^https:\/\/www\.videotree\.co\.in$/,
-      /\.airoapp\.ai$/,
-      /\.preview\.c35\.airoapp\.ai$/,
-    ]
-    if (allowed.some((r) => r.test(origin))) return callback(null, true)
-    callback(null, true) // keep open for now — tighten after stable
-  },
-  credentials: false,
-}))
+app.use(cors({ origin: '*' }))
 app.use(express.json({ limit: '10mb' }))
 app.use(express.urlencoded({ extended: true }))
 
