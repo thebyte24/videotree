@@ -2,6 +2,7 @@ const express      = require('express')
 const router       = require('express').Router()
 const { pool }     = require('../db')
 const requireAdmin = require('../middleware/auth')
+const { cacheMiddleware, del: cacheDelete } = require('../cache')
 
 const parseJ = (v, fallback = []) => {
   if (v === null || v === undefined) return fallback
@@ -20,7 +21,7 @@ async function ensureYoutubeCol() {
 let ytColEnsured = false
 
 // GET /api/events
-router.get('/', async (_req, res) => {
+router.get('/', cacheMiddleware(120), async (_req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM events ORDER BY `order` ASC, createdAt DESC')
     const events = rows.map(r => ({ ...r, story: parseJ(r.story), sections: parseJ(r.sections) }))
@@ -32,7 +33,7 @@ router.get('/', async (_req, res) => {
 })
 
 // GET /api/events/:slug
-router.get('/:slug', async (req, res) => {
+router.get('/:slug', cacheMiddleware(120), async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM events WHERE slug = ?', [req.params.slug])
     if (!rows.length) return res.status(404).json({ error: 'Event not found' })
@@ -53,6 +54,7 @@ router.post('/', requireAdmin, async (req, res) => {
       'INSERT INTO events (slug, couple, location, date, tagline, story, coverImage, sections, `order`, youtubeUrl) VALUES (?,?,?,?,?,?,?,?,?,?)',
       [slug, couple, location, date, tagline, JSON.stringify(story), coverImage, JSON.stringify(sections), order, youtubeUrl]
     )
+    cacheDelete('http:/api/events')
     const [rows] = await pool.execute('SELECT * FROM events WHERE slug = ?', [slug])
     const r = rows[0]
     res.status(201).json({ ...r, story: parseJ(r.story), sections: parseJ(r.sections) })
@@ -75,6 +77,7 @@ router.put('/:slug', requireAdmin, async (req, res) => {
          sections=VALUES(sections), \`order\`=VALUES(\`order\`), youtubeUrl=VALUES(youtubeUrl)`,
       [req.params.slug, couple, location, date, tagline, JSON.stringify(story), coverImage, JSON.stringify(sections), order, youtubeUrl]
     )
+    cacheDelete('http:/api/events')
     const [rows] = await pool.execute('SELECT * FROM events WHERE slug = ?', [req.params.slug])
     const r = rows[0]
     res.json({ ...r, story: parseJ(r.story), sections: parseJ(r.sections) })
@@ -87,6 +90,7 @@ router.put('/:slug', requireAdmin, async (req, res) => {
 router.delete('/:slug', requireAdmin, async (req, res) => {
   try {
     await pool.execute('DELETE FROM events WHERE slug = ?', [req.params.slug])
+    cacheDelete('http:/api/events')
     res.json({ success: true })
   } catch (err) {
     res.status(500).json({ error: err.message })

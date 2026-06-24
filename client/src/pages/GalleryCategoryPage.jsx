@@ -1,24 +1,50 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Footer from '../components/Footer'
 import Lightbox from '../components/Lightbox'
+import ImageWithSkeleton from '../components/ImageWithSkeleton'
 import { useApi } from '../hooks/useApi'
 import { apiGetCategory } from '../api/client'
 import { photoUrl, photoPosition } from '../utils/photoUtils'
 import SEO from '../components/SEO'
 import './GalleryCategoryPage.css'
 
+// How many photos to show initially, then load more on scroll
+const PAGE_SIZE = 24
+
 export default function GalleryCategoryPage() {
   const { category } = useParams()
   const navigate = useNavigate()
   const { data, loading, error } = useApi(() => apiGetCategory(category), [category])
   const [lightboxIdx, setLightboxIdx] = useState(null)
+  const [visible, setVisible] = useState(PAGE_SIZE)
 
-  useEffect(() => { window.scrollTo(0, 0) }, [category])
+  useEffect(() => { window.scrollTo(0, 0); setVisible(PAGE_SIZE) }, [category])
+
+  // Infinite-scroll: load more photos as user scrolls near bottom
+  const loadMore = useCallback(() => {
+    if (!data) return
+    const total = (data.photos || []).length
+    setVisible(v => Math.min(v + PAGE_SIZE, total))
+  }, [data])
+
+  useEffect(() => {
+    function onScroll() {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 400) {
+        loadMore()
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [loadMore])
 
   if (loading) {
-    return <div className="gcpage gcpage--loading"><div className="page-spinner" /></div>
+    return (
+      <div className="gcpage gcpage--loading">
+        <div className="page-spinner" />
+      </div>
+    )
   }
 
   if (error || !data) {
@@ -31,6 +57,7 @@ export default function GalleryCategoryPage() {
   }
 
   const photos = data.photos || []
+  const visiblePhotos = photos.slice(0, visible)
 
   return (
     <div className="gcpage">
@@ -41,9 +68,15 @@ export default function GalleryCategoryPage() {
         keywords={`${data.label.toLowerCase()} photography vizag, ${data.label.toLowerCase()} photographer visakhapatnam`}
         ogImage={data.coverImage || undefined}
       />
+
       {/* Hero banner */}
       <div className="gcpage__hero">
-        <img src={photoUrl(data.coverImage || photos[0] || '')} alt={data.label} className="gcpage__hero-img" style={{ objectPosition: photoPosition(data.coverImage || photos[0]) }} />
+        <img
+          src={photoUrl(data.coverImage || photos[0] || '')}
+          alt={data.label}
+          className="gcpage__hero-img"
+          style={{ objectPosition: photoPosition(data.coverImage || photos[0]) }}
+        />
         <div className="gcpage__hero-overlay" />
         <div className="gcpage__hero-content">
           <motion.h1
@@ -74,33 +107,42 @@ export default function GalleryCategoryPage() {
         </div>
       </div>
 
-      {/* Photo grid */}
+      {/* Photo grid — only renders visible slice */}
       <div className="gcpage__grid">
-        {data.photos.map((entry, i) => (
+        {visiblePhotos.map((entry, i) => (
           <motion.div
             key={i}
             className="gcpage__item"
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, delay: (i % 3) * 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.6, delay: (i % 3) * 0.07, ease: [0.22, 1, 0.36, 1] }}
             onClick={() => setLightboxIdx(i)}
             style={{ cursor: 'pointer' }}
           >
-            <img
+            <ImageWithSkeleton
               src={photoUrl(entry)}
               alt={`${data.label} ${i + 1}`}
-              loading="lazy"
+              loading={i < 6 ? 'eager' : 'lazy'}
               style={{ objectPosition: photoPosition(entry) }}
             />
           </motion.div>
         ))}
       </div>
 
-      {/* Lightbox */}
+      {/* Load more indicator */}
+      {visible < photos.length && (
+        <div className="gcpage__load-more">
+          <button className="gcpage__load-more-btn" onClick={loadMore}>
+            Load more ({photos.length - visible} remaining)
+          </button>
+        </div>
+      )}
+
+      {/* Lightbox — with adjacent image preloading */}
       {lightboxIdx !== null && (
         <Lightbox
-          photos={data.photos}
+          photos={photos}
           index={lightboxIdx}
           onClose={() => setLightboxIdx(null)}
           onNav={setLightboxIdx}

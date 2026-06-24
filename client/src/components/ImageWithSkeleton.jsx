@@ -7,7 +7,7 @@ import './ImageWithSkeleton.css'
  *
  * Props: all standard <img> props are forwarded.
  */
-export default function ImageWithSkeleton({ src, alt, className = '', style = {}, ...rest }) {
+export default function ImageWithSkeleton({ src, alt, className = '', style = {}, loading: loadingAttr = 'lazy', ...rest }) {
   const [status, setStatus] = useState('loading') // 'loading' | 'loaded' | 'error'
 
   return (
@@ -28,6 +28,7 @@ export default function ImageWithSkeleton({ src, alt, className = '', style = {}
       <img
         src={src}
         alt={alt}
+        loading={loadingAttr}
         className={`img-skeleton__img ${status === 'loaded' ? 'img-skeleton__img--visible' : ''}`}
         onLoad={() => setStatus('loaded')}
         onError={() => setStatus('error')}

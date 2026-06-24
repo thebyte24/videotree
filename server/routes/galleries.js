@@ -2,6 +2,7 @@ const express         = require('express')
 const router          = require('express').Router()
 const { pool }        = require('../db')
 const requireAdmin    = require('../middleware/auth')
+const { cacheMiddleware, del: cacheDelete } = require('../cache')
 
 const parseJ = (v, fallback = []) => {
   if (v === null || v === undefined) return fallback
@@ -21,7 +22,7 @@ async function ensureYoutubeCol() {
 let ytColEnsured = false
 
 // GET /api/galleries
-router.get('/', async (_req, res) => {
+router.get('/', cacheMiddleware(120), async (_req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM gallery_categories ORDER BY `order` ASC, createdAt ASC')
     const cats = rows.map(r => ({ ...r, photos: parseJ(r.photos) }))
@@ -33,7 +34,7 @@ router.get('/', async (_req, res) => {
 })
 
 // GET /api/galleries/:slug
-router.get('/:slug', async (req, res) => {
+router.get('/:slug', cacheMiddleware(120), async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM gallery_categories WHERE slug = ?', [req.params.slug])
     if (!rows.length) return res.status(404).json({ error: 'Category not found' })
@@ -59,6 +60,8 @@ router.put('/:slug', requireAdmin, async (req, res) => {
          youtubeUrl=VALUES(youtubeUrl)`,
       [req.params.slug, label, description, coverImage, JSON.stringify(photos), order, youtubeUrl]
     )
+    // Invalidate cache for this category and the full list
+    cacheDelete(`http:/api/galleries`)
     const [rows] = await pool.execute('SELECT * FROM gallery_categories WHERE slug = ?', [req.params.slug])
     const r = rows[0]
     res.json({ ...r, photos: parseJ(r.photos) })

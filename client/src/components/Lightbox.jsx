@@ -38,6 +38,16 @@ export default function Lightbox({ photos, index, onClose, onNav }) {
 
   const url = photoUrl(photos[index])
 
+  // Preload adjacent images so next/prev feels instant
+  useEffect(() => {
+    const preload = (idx) => {
+      const u = photoUrl(photos[(idx + total) % total])
+      if (u) { const img = new Image(); img.src = u }
+    }
+    preload(index + 1)
+    preload(index - 1)
+  }, [index, photos, total])
+
   return (
     <AnimatePresence>
       <motion.div

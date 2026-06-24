@@ -188,3 +188,27 @@
   background: #cc0000;
   transform: translateY(-2px);
 }
+
+/* ── Load more ─────────────────────────────────────────────────────────────── */
+.gcpage__load-more {
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem 3rem;
+}
+
+.gcpage__load-more-btn {
+  background: transparent;
+  border: 1px solid #c9a96e;
+  color: #c9a96e;
+  padding: 0.65rem 2rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.gcpage__load-more-btn:hover {
+  background: #c9a96e;
+  color: #0a0a0a;
+}

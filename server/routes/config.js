@@ -2,9 +2,10 @@ const express      = require('express')
 const router       = express.Router()
 const { pool }     = require('../db')
 const requireAdmin = require('../middleware/auth')
+const { cacheMiddleware, del: cacheDelete } = require('../cache')
 
 // GET /api/config/:key
-router.get('/:key', async (req, res) => {
+router.get('/:key', cacheMiddleware(120), async (req, res) => {
   try {
     const [rows] = await pool.execute('SELECT * FROM site_config WHERE `key` = ?', [req.params.key])
     if (!rows.length) return res.status(404).json({ error: 'Config not found' })
@@ -25,6 +26,7 @@ router.put('/:key', requireAdmin, async (req, res) => {
        ON DUPLICATE KEY UPDATE value=VALUES(value)`,
       [req.params.key, JSON.stringify(req.body.value)]
     )
+    cacheDelete(`http:/api/config/${req.params.key}`)
     const [rows] = await pool.execute('SELECT * FROM site_config WHERE `key` = ?', [req.params.key])
     const r = rows[0]
     const value = typeof r.value === 'string' ? JSON.parse(r.value) : r.value
