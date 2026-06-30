@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import logoImg from '../assets/videotreetransparent.png'
 import { apiGetConfig } from '../api/client'
+import { useApi } from '../hooks/useApi'
 import { photoUrl, photoPosition } from '../utils/photoUtils'
 import './Hero.css'
 
@@ -17,12 +18,6 @@ const categories = [
   { name: 'Birthdays',   slug: 'birthdays' },
 ]
 
-const FALLBACK_SLIDES = [
-  { type: 'image', url: 'https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1800&q=90' },
-  { type: 'image', url: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1800&q=90' },
-  { type: 'image', url: 'https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1800&q=90' },
-]
-
 // Detect if a URL is a video
 function isVideo(url) {
   return /\.(mp4|webm|ogg|mov)(\?|$)/i.test(url)
@@ -34,7 +29,6 @@ function normaliseSlides(raw) {
     if (typeof item === 'string') {
       return { type: isVideo(item) ? 'video' : 'image', url: item, x: 50, y: 50 }
     }
-    // Already an object — could be { url, x, y } or { type, url, x, y }
     const url = typeof item.url === 'string' ? item.url : ''
     return {
       type: item.type || (isVideo(url) ? 'video' : 'image'),
@@ -63,7 +57,6 @@ function VideoSlide({ url, active }) {
   function handleLoadedMetadata() {
     if (!ref.current) return
     const { videoWidth, videoHeight } = ref.current
-    // Portrait = taller than wide (shot on phone vertically)
     setIsPortrait(videoHeight > videoWidth)
   }
 
@@ -82,43 +75,68 @@ function VideoSlide({ url, active }) {
 }
 
 export default function Hero() {
-  const [slides, setSlides] = useState(FALLBACK_SLIDES)
+  // Use cached useApi so repeat visits are instant
+  const { data: configData } = useApi(apiGetConfig.bind(null, 'heroSlides'))
+  const rawSlides = configData?.value?.length ? normaliseSlides(configData.value) : []
+
   const [current, setCurrent] = useState(0)
   const [paused,  setPaused]  = useState(false)
   const navigate = useNavigate()
   const dragStart = useRef(null)
 
-  useEffect(() => {
-    apiGetConfig('heroSlides')
-      .then((d) => {
-        if (d?.value?.length) setSlides(normaliseSlides(d.value))
-      })
-      .catch(() => {})
-  }, [])
+  // Reset to first slide if slides change
+  useEffect(() => { setCurrent(0) }, [rawSlides.length])
 
-  const next = useCallback(() => setCurrent(c => (c + 1) % slides.length), [slides.length])
-  const prev = useCallback(() => setCurrent(c => (c - 1 + slides.length) % slides.length), [slides.length])
+  const slides = rawSlides
+  const total  = slides.length
 
-  // Auto-advance — use longer duration for video slides
+  const next = useCallback(() => setCurrent(c => (c + 1) % total), [total])
+  const prev = useCallback(() => setCurrent(c => (c - 1 + total) % total), [total])
+
+  // Auto-advance
   useEffect(() => {
-    if (paused) return
+    if (paused || total === 0) return
     const slide = slides[current]
     const duration = slide?.type === 'video' ? 12000 : 5500
     const t = setTimeout(next, duration)
     return () => clearTimeout(t)
-  }, [paused, next, current, slides])
+  }, [paused, next, current, slides, total])
+
+  // Preload next image slide so transition is instant
+  useEffect(() => {
+    if (total === 0) return
+    const nextSlide = slides[(current + 1) % total]
+    if (nextSlide?.type === 'image' && nextSlide.url) {
+      const img = new Image()
+      img.src = nextSlide.url
+    }
+  }, [current, slides, total])
 
   const slide = slides[current]
 
-  // Swipe / drag handlers (touch + mouse)
   const SWIPE_THRESHOLD = 50
-
   const handleDragStart = (clientX) => { dragStart.current = clientX }
   const handleDragEnd   = (clientX) => {
     if (dragStart.current === null) return
     const delta = dragStart.current - clientX
     if (Math.abs(delta) > SWIPE_THRESHOLD) delta > 0 ? next() : prev()
     dragStart.current = null
+  }
+
+  // No slides configured yet — render a plain dark hero so layout doesn't break
+  if (total === 0) {
+    return (
+      <section id="home" className="hero">
+        <div className="carousel__stage carousel__stage--empty" />
+        <div className="hero__mobile-cats">
+          {categories.map((c) => (
+            <button key={c.slug} className="hero__mobile-pill" onClick={() => navigate(`/galleries/${c.slug}`)}>
+              {c.name}
+            </button>
+          ))}
+        </div>
+      </section>
+    )
   }
 
   return (
@@ -132,23 +150,29 @@ export default function Hero() {
       onMouseDown={(e)  => handleDragStart(e.clientX)}
       onMouseUp={(e)    => handleDragEnd(e.clientX)}
     >
-      {/* Slide container — on desktop fills hero, on mobile is a fixed-height box */}
       <div className="carousel__stage">
         <AnimatePresence mode="wait">
           <motion.div
             key={current}
             className="carousel__slide"
-            style={slide?.type === 'image' ? {
-              backgroundImage: `url(${slide.url})`,
-              backgroundPosition: `${slide.x ?? 50}% ${slide.y ?? 50}%`
-            } : {}}
             initial={{ opacity: 0, scale: slide?.type === 'video' ? 1 : 1.06 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
           >
-            {slide?.type === 'video' && (
+            {slide?.type === 'video' ? (
               <VideoSlide url={slide.url} active={true} />
+            ) : (
+              /* Use <img> instead of backgroundImage so browser can prioritise + preload */
+              <img
+                src={slide.url}
+                alt=""
+                className="carousel__img"
+                fetchpriority={current === 0 ? 'high' : 'auto'}
+                loading={current === 0 ? 'eager' : 'lazy'}
+                style={{ objectPosition: `${slide.x ?? 50}% ${slide.y ?? 50}%` }}
+                draggable={false}
+              />
             )}
           </motion.div>
         </AnimatePresence>
@@ -162,11 +186,7 @@ export default function Hero() {
         >
           <ul className="category-list">
             {categories.map((c) => (
-              <li
-                key={c.slug}
-                className="category-item"
-                onClick={() => navigate(`/galleries/${c.slug}`)}
-              >
+              <li key={c.slug} className="category-item" onClick={() => navigate(`/galleries/${c.slug}`)}>
                 <span className="cat-name">{c.name}</span>
               </li>
             ))}
@@ -186,14 +206,10 @@ export default function Hero() {
         </button>
       </div>
 
-      {/* MOBILE: category pills — outside stage, on black bg */}
+      {/* MOBILE: category pills */}
       <div className="hero__mobile-cats">
         {categories.map((c) => (
-          <button
-            key={c.slug}
-            className="hero__mobile-pill"
-            onClick={() => navigate(`/galleries/${c.slug}`)}
-          >
+          <button key={c.slug} className="hero__mobile-pill" onClick={() => navigate(`/galleries/${c.slug}`)}>
             {c.name}
           </button>
         ))}
