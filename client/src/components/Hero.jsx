@@ -1,11 +1,13 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import logoImg from '../assets/videotreetransparent.png'
 import { apiGetConfig } from '../api/client'
 import { useApi } from '../hooks/useApi'
 import { photoUrl, photoPosition } from '../utils/photoUtils'
 import './Hero.css'
+
+// Stable fetch function — defined outside component so reference never changes
+function fetchHeroSlides() { return apiGetConfig('heroSlides') }
 
 const categories = [
   { name: 'Weddings',    slug: 'weddings' },
@@ -76,7 +78,7 @@ function VideoSlide({ url, active }) {
 
 export default function Hero() {
   // Use cached useApi so repeat visits are instant
-  const { data: configData } = useApi(apiGetConfig.bind(null, 'heroSlides'))
+  const { data: configData } = useApi(fetchHeroSlides)
   const rawSlides = configData?.value?.length ? normaliseSlides(configData.value) : []
 
   const [current, setCurrent] = useState(0)

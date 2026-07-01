@@ -11,10 +11,11 @@ import Reviews from './components/Reviews'
 import ScrollTop from './components/ScrollTop'
 import WhatsAppButton from './components/WhatsAppButton'
 import ErrorBoundary from './components/ErrorBoundary'
+import ProtectedRoute from './admin/ProtectedRoute'
 import { AdminAuthProvider } from './admin/AdminAuthContext'
 import './App.css'
 
-// Lazy-load all pages — only downloaded when the user navigates to them
+// Lazy-load heavy pages — only downloaded when the user navigates to them
 const GalleryPage         = lazy(() => import('./pages/GalleryPage'))
 const GalleryCategoryPage = lazy(() => import('./pages/GalleryCategoryPage'))
 const EventsPage          = lazy(() => import('./pages/EventsPage'))
@@ -24,7 +25,6 @@ const ContactPage         = lazy(() => import('./pages/ContactPage'))
 const NotFoundPage        = lazy(() => import('./pages/NotFoundPage'))
 const AdminLogin          = lazy(() => import('./admin/AdminLogin'))
 const AdminDashboard      = lazy(() => import('./admin/AdminDashboard'))
-const ProtectedRoute      = lazy(() => import('./admin/ProtectedRoute'))
 
 const PageSpinner = () => (
   <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
