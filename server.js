@@ -1,2 +1,2 @@
-// Root entry point
-require('./server/server.js')
+// Root entry point — delegates to server/index.js
+require('./server/index.js')
