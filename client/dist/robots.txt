@@ -1,7 +1,0 @@
-User-agent: *
-Allow: /
-
-Disallow: /admin
-Disallow: /admin/dashboard
-
-Sitemap: https://videotree.co.in/sitemap.xml
