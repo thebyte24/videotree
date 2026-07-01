@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
+import { useApi } from '../hooks/useApi'
 import { apiGetReviews } from '../api/client'
 import './Reviews.css'
 
@@ -33,13 +34,8 @@ function Stars({ count }) {
 }
 
 export default function Reviews() {
-  const [reviews, setReviews] = useState(STATIC_REVIEWS)
-
-  useEffect(() => {
-    apiGetReviews()
-      .then((data) => { if (data?.length) setReviews(data) })
-      .catch(() => {}) // fallback to static on error
-  }, [])
+  const { data } = useApi(apiGetReviews)
+  const reviews = (data?.length ? data : STATIC_REVIEWS)
 
   return (
     <section className="reviews">

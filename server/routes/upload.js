@@ -13,14 +13,12 @@ router.post('/', requireAdmin, upload.array('images', 50), (req, res) => {
     return res.status(400).json({ error: 'No files uploaded' })
   }
 
+  // PUBLIC_URL in .env is the most reliable — e.g. https://videotree.co.in
+  // Fallback: trust proxy headers (works behind GoDaddy nginx with trust proxy=1)
   const baseUrl = process.env.PUBLIC_URL
-    || (req.headers['x-forwarded-proto']
-        ? `${req.headers['x-forwarded-proto']}://${req.headers['x-forwarded-host'] || req.get('host')}`
-        : `${req.protocol}://${req.get('host')}`)
-  const urls = req.files.map(
-    (f) => `${baseUrl}/uploads/${f.filename}`
-  )
+    || `${req.protocol}://${req.get('host')}`
 
+  const urls = req.files.map(f => `${baseUrl}/uploads/${f.filename}`)
   res.json({ urls })
 })
 
