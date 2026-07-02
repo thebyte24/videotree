@@ -1,10 +1,9 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { useApi } from '../hooks/useApi'
 import { apiGetEvent } from '../api/client'
 import { photoUrl, photoPosition } from '../utils/photoUtils'
-import ImageWithSkeleton from '../components/ImageWithSkeleton'
 import Lightbox from '../components/Lightbox'
 import Footer from '../components/Footer'
 import SEO from '../components/SEO'
@@ -16,10 +15,14 @@ export default function EventDetailPage() {
   const { data: ev, loading, error } = useApi(() => apiGetEvent(slug), [slug])
   const [activeTab, setActiveTab] = useState('All')
   const [lightboxIdx, setLightboxIdx] = useState(null)
-  const [visible, setVisible] = useState(24)
+  const [prevSlug, setPrevSlug] = useState(slug)
+
+  if (slug !== prevSlug) {
+    setPrevSlug(slug)
+    setActiveTab('All')
+  }
 
   useEffect(() => { window.scrollTo(0, 0) }, [slug])
-  useEffect(() => { setActiveTab('All'); setVisible(24) }, [slug])
 
   if (loading) {
     return <div className="edp edp--loading"><div className="page-spinner" /></div>

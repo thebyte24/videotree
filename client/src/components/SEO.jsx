@@ -6,7 +6,6 @@ import { useEffect } from 'react'
  */
 export default function SEO({ title, description, canonical, keywords, ogImage }) {
   const BASE_URL = 'https://videotree.co.in'
-  const DEFAULT_IMAGE = `${BASE_URL}/og-image.jpg`
   const fullTitle = title
     ? `${title} | Video Tree Visakhapatnam`
     : 'Video Tree — Wedding Photography & Videography in Visakhapatnam'

@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
 import { apiGetConfig } from '../api/client'
 import { useApi } from '../hooks/useApi'
-import { photoUrl, photoPosition } from '../utils/photoUtils'
 import './Hero.css'
 
 // Stable fetch function — defined outside component so reference never changes
@@ -83,11 +82,14 @@ export default function Hero() {
 
   const [current, setCurrent] = useState(0)
   const [paused,  setPaused]  = useState(false)
+  const [prevSlidesLength, setPrevSlidesLength] = useState(rawSlides.length)
   const navigate = useNavigate()
   const dragStart = useRef(null)
 
-  // Reset to first slide if slides change
-  useEffect(() => { setCurrent(0) }, [rawSlides.length])
+  if (rawSlides.length !== prevSlidesLength) {
+    setPrevSlidesLength(rawSlides.length)
+    setCurrent(0)
+  }
 
   const slides = rawSlides
   const total  = slides.length
