@@ -37,50 +37,64 @@ app.get('/api/version', (_req, res) => res.json({ version: '2026-07-01' }))
 // Remove this route after running it once
 app.get('/api/fix-image-urls', async (_req, res) => {
   try {
-    const fixScript = require('./fix-image-urls')
-    res.json({ ok: true, message: 'URL fix triggered — check server logs' })
-  } catch (e) {
-    // Run inline if require doesn't work
     const { pool } = require('./db')
     const CORRECT_BASE = (process.env.PUBLIC_URL || 'https://videotree.co.in').replace(/\/$/, '')
 
     function fixUrl(url) {
-      if (!url || !url.includes('/uploads/')) return url
+      if (!url || typeof url !== 'string') return url
+      if (!url.includes('/uploads/')) return url
       return `${CORRECT_BASE}/uploads/${url.split('/uploads/').pop()}`
     }
     function fixArr(arr) {
       return (arr || []).map(item => {
         if (typeof item === 'string') return fixUrl(item)
-        if (item && item.url) return { ...item, url: fixUrl(item.url) }
+        if (item && typeof item === 'object') {
+          const out = { ...item }
+          if (out.url) out.url = fixUrl(out.url)
+          return out
+        }
         return item
       })
     }
 
     let fixed = 0
+    const log = []
+
     const [cats] = await pool.execute('SELECT id, slug, coverImage, photos FROM gallery_categories')
     for (const c of cats) {
       const photos = typeof c.photos === 'string' ? JSON.parse(c.photos) : (c.photos || [])
+      const newCover = fixUrl(c.coverImage)
+      const newPhotos = fixArr(photos)
       await pool.execute('UPDATE gallery_categories SET coverImage=?, photos=? WHERE id=?',
-        [fixUrl(c.coverImage), JSON.stringify(fixArr(photos)), c.id])
+        [newCover, JSON.stringify(newPhotos), c.id])
+      log.push(`gallery: ${c.slug} — cover: ${newCover}`)
       fixed++
     }
+
     const [evs] = await pool.execute('SELECT id, slug, coverImage, sections FROM events')
     for (const ev of evs) {
       const sections = typeof ev.sections === 'string' ? JSON.parse(ev.sections) : (ev.sections || [])
       const newSections = sections.map(s => ({ ...s, photos: fixArr(s.photos || []) }))
+      const newCover = fixUrl(ev.coverImage)
       await pool.execute('UPDATE events SET coverImage=?, sections=? WHERE id=?',
-        [fixUrl(ev.coverImage), JSON.stringify(newSections), ev.id])
+        [newCover, JSON.stringify(newSections), ev.id])
+      log.push(`event: ${ev.slug} — cover: ${newCover}`)
       fixed++
     }
+
     const [cfgs] = await pool.execute('SELECT id, `key`, value FROM site_config')
     for (const cfg of cfgs) {
       const val = typeof cfg.value === 'string' ? JSON.parse(cfg.value) : cfg.value
       const newVal = Array.isArray(val) ? fixArr(val) : val
       await pool.execute('UPDATE site_config SET value=? WHERE id=?',
         [JSON.stringify(newVal), cfg.id])
+      log.push(`config: ${cfg.key}`)
       fixed++
     }
-    res.json({ ok: true, fixed, base: CORRECT_BASE })
+
+    res.json({ ok: true, fixed, base: CORRECT_BASE, log })
+  } catch (e) {
+    res.status(500).json({ error: e.message })
   }
 })
 
