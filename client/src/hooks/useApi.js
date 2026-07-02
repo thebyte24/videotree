@@ -34,37 +34,63 @@ export function useApi(fetchFn, deps = []) {
   const cacheKey = `${fetchFn.name}:${JSON.stringify(deps)}`
   const cached   = getCached(cacheKey)
 
-  const [data,    setData]    = useState(cached)
-  const [loading, setLoading] = useState(!cached)
-  const [error,   setError]   = useState(null)
+  const [state, setState] = useState({
+    data: cached,
+    loading: !cached,
+    error: null,
+    cacheKey: cacheKey // Store cacheKey to detect changes during render
+  })
+
+  // Detect derived state changes directly during render instead of effect
+  if (state.cacheKey !== cacheKey) {
+    const newCached = getCached(cacheKey)
+    setState({
+      data: newCached,
+      loading: !newCached,
+      error: null,
+      cacheKey: cacheKey
+    })
+  }
 
   // Keep a stable ref so the effect doesn't re-run when fetchFn identity changes
   const fnRef = useRef(fetchFn)
-  fnRef.current = fetchFn
 
   useEffect(() => {
+    fnRef.current = fetchFn
+  }, [fetchFn])
+
+  useEffect(() => {
+    // Check if we just initialized state from cache during render
     const hit = getCached(cacheKey)
-    if (hit) { setData(hit); setLoading(false); return }
+    if (hit) {
+      return
+    }
 
     let cancelled = false
-    setLoading(true)
-    setError(null)
+
+    // We don't need to call setLoading(true) here because it is handled during the render phase
 
     fnRef.current()
       .then((result) => {
         if (!cancelled) {
           setCached(cacheKey, result)
-          setData(result)
-          setLoading(false)
+          setState(prev => ({ ...prev, data: result, loading: false }))
         }
       })
       .catch((err) => {
-        if (!cancelled) { setError(err.message); setLoading(false) }
+        if (!cancelled) {
+          setState(prev => ({ ...prev, error: err.message, loading: false }))
+        }
       })
 
     return () => { cancelled = true }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, deps)
 
-  return { data, loading, error }
+  // Use the latest derived state if cacheKey changed in this render, otherwise state
+  const currentData = state.cacheKey !== cacheKey ? (getCached(cacheKey) || state.data) : state.data;
+  const currentLoading = state.cacheKey !== cacheKey ? !getCached(cacheKey) : state.loading;
+  const currentError = state.cacheKey !== cacheKey ? null : state.error;
+
+  return { data: currentData, loading: currentLoading, error: currentError }
 }

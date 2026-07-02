@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useApi } from '../hooks/useApi'
 import { apiGetReviews } from '../api/client'
