@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import Footer from '../components/Footer'
 import { useApi } from '../hooks/useApi'
 import { apiGetCategories } from '../api/client'
-import { photoUrl, photoPosition } from '../utils/photoUtils'
+import { photoUrl } from '../utils/photoUtils'
 import SEO from '../components/SEO'
 import './GalleryPage.css'
 

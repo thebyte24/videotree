@@ -19,8 +19,14 @@ export default function GalleryCategoryPage() {
   const { data, loading, error } = useApi(() => apiGetCategory(category), [category])
   const [lightboxIdx, setLightboxIdx] = useState(null)
   const [visible, setVisible] = useState(PAGE_SIZE)
+  const [prevCategory, setPrevCategory] = useState(category)
 
-  useEffect(() => { window.scrollTo(0, 0); setVisible(PAGE_SIZE) }, [category])
+  if (category !== prevCategory) {
+    setPrevCategory(category)
+    setVisible(PAGE_SIZE)
+  }
+
+  useEffect(() => { window.scrollTo(0, 0) }, [category])
 
   // Infinite-scroll: load more photos as user scrolls near bottom
   const loadMore = useCallback(() => {

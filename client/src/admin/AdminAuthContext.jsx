@@ -1,7 +1,6 @@
-import { createContext, useContext, useState } from 'react'
+import { useState } from 'react'
 import { apiLogin, apiLogout, isLoggedIn } from '../api/client'
-
-const AdminAuthContext = createContext(null)
+import { AdminAuthContext } from './AdminAuthContext.js'
 
 export function AdminAuthProvider({ children }) {
   const [loggedIn, setLoggedIn] = useState(() => isLoggedIn())
@@ -26,8 +25,4 @@ export function AdminAuthProvider({ children }) {
       {children}
     </AdminAuthContext.Provider>
   )
-}
-
-export function useAdminAuth() {
-  return useContext(AdminAuthContext)
 }

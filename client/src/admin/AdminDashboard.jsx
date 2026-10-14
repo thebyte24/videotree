@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAdminAuth } from './AdminAuthContext'
+import { useAdminAuth } from './useAdminAuth'
 import {
   apiGetCategories, apiUpdateCategory,
   apiGetEvents, apiUpdateEvent, apiCreateEvent, apiDeleteEvent,
   apiGetConfig, apiSetConfig,
+  apiDeleteImage,
   apiUploadImages,
   apiGetReviews, apiCreateReview, apiUpdateReview, apiDeleteReview,
 } from '../api/client'
@@ -329,7 +330,7 @@ export default function AdminDashboard() {
         setStrip(stripData.value || [])
         const revs = await apiGetReviews().catch(() => [])
         setReviews(revs)
-      } catch (e) {
+      } catch {
         setApiError('Could not connect to server. Is the backend running?')
       }
       setLoading(false)

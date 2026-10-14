@@ -18,23 +18,15 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Close menu on route change
-  useEffect(() => { setMenuOpen(false) }, [location.pathname])
+  const [prevPathname, setPrevPathname] = useState(location.pathname)
+
+  // Close menu on route change by resetting state during render
+  if (location.pathname !== prevPathname) {
+    setPrevPathname(location.pathname)
+    if (menuOpen) setMenuOpen(false)
+  }
 
   const solidNav = !isHome || scrolled
-
-  function handleAnchor(e, anchor) {
-    e.preventDefault()
-    setMenuOpen(false)
-    if (isHome) {
-      document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
-    } else {
-      navigate('/')
-      setTimeout(() => {
-        document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth' })
-      }, 300)
-    }
-  }
 
   const navLinks = (
     <>
